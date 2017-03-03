@@ -738,12 +738,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return actions;
 	};
 
-	var paginator = exports.paginator = function paginator(itemsReducer, params, pages, currentPages, requestPageActionCreators) {
+	var paginator = exports.paginator = function paginator(itemsReducer, params, pages, currentPages, cursor, requestPageActionCreators) {
 	  return _extends({
 	    reducers: (0, _redux.combineReducers)({
 	      params: params,
 	      pages: pages,
-	      currentPages: currentPages
+	      currentPages: currentPages,
+	      cursor: cursor
 	    }),
 	    itemsReducer: itemsReducer
 	  }, requestPageActionCreators);
@@ -767,9 +768,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var currentPages = onlyForEndpoint(endpoint, _reducers.currentPages);
 
+	  var cursor = onlyForEndpoint(endpoint, _reducers.cursor);
+
 	  var requestPageActionCreators = getRequestPageActionCreatorsFor(endpoint, names, pageArgName, idKey, initialItem, resultsKey, countKey, headers);
 
-	  return paginator(_reducers.items, params, pages, currentPages, requestPageActionCreators);
+	  return paginator(_reducers.items, params, pages, currentPages, cursor, requestPageActionCreators);
 	};
 
 /***/ },
@@ -840,7 +843,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
-	exports.items = exports.currentPages = exports.pages = exports.params = undefined;
+	exports.items = exports.cursor = exports.currentPages = exports.pages = exports.params = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -921,6 +924,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _extends({}, currentPages, (_extends6 = {}, _extends6[meta.name] = pageUrl, _extends6));
 	    default:
 	      return currentPages;
+	  }
+	};
+
+	var cursor = exports.cursor = function cursor() {
+	  var _extends7;
+
+	  var cursor = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	  var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	  var type = action.type,
+	      meta = action.meta;
+
+	  switch (type) {
+	    case _actionTypes.REQUEST_PAGE:
+	      return _extends({}, cursor, (_extends7 = {}, _extends7[meta.name] = action.meta.cursor ? action.meta.cursor : null, _extends7));
+	    default:
+	      return cursor;
 	  }
 	};
 

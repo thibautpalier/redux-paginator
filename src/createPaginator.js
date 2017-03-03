@@ -3,6 +3,7 @@ import { combineReducers } from 'redux'
 import {
   params as paramsReducer,
   pages as pagesReducer,
+  cursor as cursorReducer,
   currentPages as currentPagesReducer,
   items as itemsReducer
 } from './reducers'
@@ -67,11 +68,12 @@ export const getRequestPageActionCreatorsFor = (
   return actions
 }
 
-export const paginator = (itemsReducer, params, pages, currentPages, requestPageActionCreators) => ({
+export const paginator = (itemsReducer, params, pages, currentPages, cursor, requestPageActionCreators) => ({
   reducers: combineReducers({
     params,
     pages,
-    currentPages
+    currentPages,
+    cursor
   }),
   itemsReducer,
   ...requestPageActionCreators
@@ -93,6 +95,8 @@ export const createPaginator = (endpoint, names, {
 
   const currentPages = onlyForEndpoint(endpoint, currentPagesReducer)
 
+  const cursor = onlyForEndpoint(endpoint, cursorReducer)
+
   const requestPageActionCreators = getRequestPageActionCreatorsFor(
     endpoint,
     names,
@@ -104,6 +108,6 @@ export const createPaginator = (endpoint, names, {
     headers
   )
 
-  return paginator(itemsReducer, params, pages, currentPages, requestPageActionCreators)
+  return paginator(itemsReducer, params, pages, currentPages, cursor, requestPageActionCreators)
 
 }
