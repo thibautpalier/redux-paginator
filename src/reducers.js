@@ -74,7 +74,7 @@ export const currentPages = (currentPages = {}, action = {}) => {
 export const cursor = (cursor = {}, action = {}) => {
   const { type, meta } = action
   switch (type) {
-    case REQUEST_PAGE:
+    case RECEIVE_PAGE:
       return {
         ...cursor,
         [meta.name]: meta.cursor

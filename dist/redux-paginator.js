@@ -936,7 +936,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      meta = action.meta;
 
 	  switch (type) {
-	    case _actionTypes.REQUEST_PAGE:
+	    case _actionTypes.RECEIVE_PAGE:
 	      return _extends({}, cursor, (_extends7 = {}, _extends7[meta.name] = meta.cursor, _extends7));
 	    default:
 	      return cursor;
