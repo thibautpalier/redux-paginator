@@ -1,4 +1,5 @@
 {
+  "version":"1.0.0",
   "dependencies": {
     "lodash.pick": "^4.3.0",
     "query-string": "^4.2.2",
