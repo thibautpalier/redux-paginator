@@ -40,6 +40,7 @@ export const receivePage = (
   pageArgName,
   idKey,
   page,
+  cursor,
   params,
   items,
   count,
@@ -48,6 +49,7 @@ export const receivePage = (
 ) => ({
   type: RECEIVE_PAGE,
   meta: {
+    cursor,
     endpoint,
     name,
     initialItem,

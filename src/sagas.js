@@ -10,16 +10,17 @@ import {
 
 export function *fetchPage(endpoint, name, initialItem, resultsKey, countKey, pageArgName, idKey, page, params, headers) {
   try {
-    let results, count
+    let results, count, cursor
     const { response, [FROM_CACHE_FLAG]: fromCache } = yield call(fetchPageRequest, endpoint, pageArgName, page, params, headers)
     if (typeof resultsKey == 'undefined') {
       results = response
     }
     else {
       results = response[resultsKey]
-      count = response[countKey]
+      cursor = response.cursor
+      count = response.cursor[countKey]
     }
-    yield put(receivePage(endpoint, name, initialItem, pageArgName, idKey, page, params, results, count, response, !(typeof fromCache == 'undefined')))
+    yield put(receivePage(endpoint, name, initialItem, pageArgName, idKey, page, cursor, params, results, count, response, !(typeof fromCache == 'undefined')))
   } catch(error) {
     // TODO
   }

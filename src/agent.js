@@ -48,18 +48,14 @@ export const fetchPage = (endpoint, pageArgName, page, params, headers = {}) => 
   const url = endpoint + suffix
   const hash = hashUrl(url)
   let fromCache = true
-  let promise = _promises[hash]
-  // if (typeof promise == 'undefined') {
-    fromCache = false
-    promise = new Promise((resolve, reject) =>
-      agent
-        .get(url)
-        .set(headers)
-        .end((err, res) => err ? reject(err) : resolve(res))
-    )
-    _promises[hash] = promise
-  console.log(hash)
-  // }
+  fromCache = false
+  let promise = new Promise((resolve, reject) =>
+    agent
+      .get(url)
+      .set(headers)
+      .end((err, res) => err ? reject(err) : resolve(res))
+  )
+  _promises[hash] = promise
 
   return promise.then(res => fromCache ? {
     response: res.body,

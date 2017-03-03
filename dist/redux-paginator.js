@@ -121,11 +121,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	};
 
-	var receivePage = exports.receivePage = function receivePage(endpoint, name, initialItem, pageArgName, idKey, page, params, items, count, raw) {
-	  var fromCache = arguments.length > 10 && arguments[10] !== undefined ? arguments[10] : false;
+	var receivePage = exports.receivePage = function receivePage(endpoint, name, initialItem, pageArgName, idKey, page, cursor, params, items, count, raw) {
+	  var fromCache = arguments.length > 11 && arguments[11] !== undefined ? arguments[11] : false;
 	  return {
 	    type: _actionTypes.RECEIVE_PAGE,
 	    meta: {
+	      cursor: cursor,
 	      endpoint: endpoint,
 	      name: name,
 	      initialItem: initialItem,
@@ -226,17 +227,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var url = endpoint + suffix;
 	  var hash = hashUrl(url);
 	  var fromCache = true;
-	  var promise = _promises[hash];
-	  // if (typeof promise == 'undefined') {
 	  fromCache = false;
-	  promise = new Promise(function (resolve, reject) {
+	  var promise = new Promise(function (resolve, reject) {
 	    return _superagent2.default.get(url).set(headers).end(function (err, res) {
 	      return err ? reject(err) : resolve(res);
 	    });
 	  });
 	  _promises[hash] = promise;
-	  console.log(hash);
-	  // }
 
 	  return promise.then(function (res) {
 	    var _ref2;
@@ -984,14 +981,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _marked = [fetchPage, requestPageWatcher].map(regeneratorRuntime.mark);
 
 	function fetchPage(endpoint, name, initialItem, resultsKey, countKey, pageArgName, idKey, page, params, headers) {
-	  var results, count, _ref, response, fromCache;
+	  var results, count, cursor, _ref, response, fromCache;
 
 	  return regeneratorRuntime.wrap(function fetchPage$(_context) {
 	    while (1) {
 	      switch (_context.prev = _context.next) {
 	        case 0:
 	          _context.prev = 0;
-	          results = void 0, count = void 0;
+	          results = void 0, count = void 0, cursor = void 0;
 	          _context.next = 4;
 	          return (0, _effects.call)(_agent.fetchPage, endpoint, pageArgName, page, params, headers);
 
@@ -1004,10 +1001,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            results = response;
 	          } else {
 	            results = response[resultsKey];
-	            count = response[countKey];
+	            cursor = response.cursor;
+	            count = response.cursor[countKey];
 	          }
 	          _context.next = 10;
-	          return (0, _effects.put)((0, _actions.receivePage)(endpoint, name, initialItem, pageArgName, idKey, page, params, results, count, response, !(typeof fromCache == 'undefined')));
+	          return (0, _effects.put)((0, _actions.receivePage)(endpoint, name, initialItem, pageArgName, idKey, page, cursor, params, results, count, response, !(typeof fromCache == 'undefined')));
 
 	        case 10:
 	          _context.next = 14;
