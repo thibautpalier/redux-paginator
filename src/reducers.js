@@ -77,7 +77,7 @@ export const cursor = (cursor = {}, action = {}) => {
     case REQUEST_PAGE:
       return {
         ...cursor,
-        [meta.name]: action.meta.cursor ? action.meta.cursor : null
+        [meta.name]: meta.cursor
       }
     default:
       return cursor
