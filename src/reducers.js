@@ -48,6 +48,7 @@ export const pages = (pages = {}, action = {}) => {
       return {
         ...pages,
         [meta.name] : {
+          ...pages[meta.name]
           [pageUrl]: {
             ...pages[pageUrl],
             ids: payload.items.map(i => i[meta.idKey]),
