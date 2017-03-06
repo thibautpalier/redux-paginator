@@ -1107,12 +1107,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var getCurrentPageResults = exports.getCurrentPageResults = function getCurrentPageResults(items, pagination, name) {
-	  var currentPage = pagination.pages[pagination.currentPages[name]];
+	  var currentPage = pagination.pages[name][pagination.currentPages[name]];
 	  return typeof currentPage == 'undefined' ? [] : Object.values((0, _lodash2.default)(items || [], currentPage.ids));
 	};
 
 	var getAllResults = exports.getAllResults = function getAllResults(items, pagination, name) {
-	  var currentPage = pagination.pages[pagination.currentPages[name]];
+	  var currentPage = pagination.pages[name][pagination.currentPages[name]];
 	  if (typeof currentPage == 'undefined') {
 	    return [];
 	  }
@@ -1132,7 +1132,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var key = _ref;
 
-	    if (pagination.pages[key].params == currentPage.params) {
+	    if (pagination.pages[name][key].params == currentPage.params) {
 	      allPagesIds = allPagesIds.concat(pagination.pages[key].ids);
 	    }
 	  }
@@ -1141,12 +1141,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var getCurrentTotalResultsCount = exports.getCurrentTotalResultsCount = function getCurrentTotalResultsCount(pagination, name) {
 	  var currentPageUrl = pagination.currentPages[name];
-	  var currentPage = pagination.pages[currentPageUrl];
+	  var currentPage = pagination.pages[name][currentPageUrl];
 	  return typeof currentPageUrl == 'undefined' ? 0 : pagination.params[currentPage.params];
 	};
 
 	var isCurrentPageFetching = exports.isCurrentPageFetching = function isCurrentPageFetching(pagination, name) {
-	  return (pagination.pages[pagination.currentPages[name]] || { fetching: true }).fetching;
+	  return (pagination.pages[name][pagination.currentPages[name]] || { fetching: true }).fetching;
 	};
 
 /***/ },
