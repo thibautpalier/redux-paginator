@@ -30,6 +30,7 @@ export const pages = (pages = {}, action = {}) => {
   let pageUrl
   switch (type) {
     case REQUEST_PAGE:
+      console.log(pages);
       pageUrl = getPageUrlFromAction(action)
       return {
         ...pages,
@@ -45,6 +46,7 @@ export const pages = (pages = {}, action = {}) => {
         }
       }
     case RECEIVE_PAGE:
+    console.log(pages);
       pageUrl = getPageUrlFromAction(action)
       return {
         ...pages,
