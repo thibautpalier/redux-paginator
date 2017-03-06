@@ -36,7 +36,6 @@ export const pages = (pages = {}, action = {}) => {
         [meta.name] : {
           ...pages[meta.name],
           [pageUrl]: {
-            ...pages[meta.name][pageUrl],
             ids: [],
             params: payload.params,
             number: payload.page,
@@ -51,7 +50,6 @@ export const pages = (pages = {}, action = {}) => {
         [meta.name] : {
           ...pages[meta.name],
           [pageUrl]: {
-            ...pages[meta.name][pageUrl],
             ids: payload.items.map(i => i[meta.idKey]),
             fetching: false
           }

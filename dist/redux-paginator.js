@@ -890,20 +890,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  switch (type) {
 	    case _actionTypes.REQUEST_PAGE:
 	      pageUrl = getPageUrlFromAction(action);
-	      return _extends({}, pages, (_extends5 = {}, _extends5[meta.name] = _extends({}, pages[meta.name], (_extends4 = {}, _extends4[pageUrl] = _extends({}, pages[meta.name][pageUrl], {
+	      return _extends({}, pages, (_extends5 = {}, _extends5[meta.name] = _extends({}, pages[meta.name], (_extends4 = {}, _extends4[pageUrl] = {
 	        ids: [],
 	        params: payload.params,
 	        number: payload.page,
 	        fetching: true
-	      }), _extends4)), _extends5));
+	      }, _extends4)), _extends5));
 	    case _actionTypes.RECEIVE_PAGE:
 	      pageUrl = getPageUrlFromAction(action);
-	      return _extends({}, pages, (_extends7 = {}, _extends7[meta.name] = _extends({}, pages[meta.name], (_extends6 = {}, _extends6[pageUrl] = _extends({}, pages[meta.name][pageUrl], {
+	      return _extends({}, pages, (_extends7 = {}, _extends7[meta.name] = _extends({}, pages[meta.name], (_extends6 = {}, _extends6[pageUrl] = {
 	        ids: payload.items.map(function (i) {
 	          return i[meta.idKey];
 	        }),
 	        fetching: false
-	      }), _extends6)), _extends7));
+	      }, _extends6)), _extends7));
 	    default:
 	      return pages;
 	  }
