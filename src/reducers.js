@@ -33,26 +33,20 @@ export const pages = (pages = {}, action = {}) => {
       pageUrl = getPageUrlFromAction(action)
       return {
         ...pages,
-        [meta.name] : {
-          ...pages[meta.name],
-          [pageUrl]: {
-            ids: [],
-            params: payload.params,
-            number: payload.page,
-            fetching: true
-          }
+        [pageUrl]: {
+          ids: [],
+          params: payload.params,
+          number: payload.page,
+          fetching: true
         }
       }
     case RECEIVE_PAGE:
       pageUrl = getPageUrlFromAction(action)
       return {
         ...pages,
-        [meta.name] : {
-          ...pages[meta.name],
-          [pageUrl]: {
-            ids: payload.items.map(i => i[meta.idKey]),
-            fetching: false
-          }
+        [pageUrl]: {
+          ids: payload.items.map(i => i[meta.idKey]),
+          fetching: false
         }
       }
     default:

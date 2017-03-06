@@ -878,7 +878,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var pages = exports.pages = function pages() {
-	  var _extends4, _extends5, _extends6, _extends7;
+	  var _extends4, _extends5;
 
 	  var pages = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -890,27 +890,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  switch (type) {
 	    case _actionTypes.REQUEST_PAGE:
 	      pageUrl = getPageUrlFromAction(action);
-	      return _extends({}, pages, (_extends5 = {}, _extends5[meta.name] = _extends({}, pages[meta.name], (_extends4 = {}, _extends4[pageUrl] = {
+	      return _extends({}, pages, (_extends4 = {}, _extends4[pageUrl] = {
 	        ids: [],
 	        params: payload.params,
 	        number: payload.page,
 	        fetching: true
-	      }, _extends4)), _extends5));
+	      }, _extends4));
 	    case _actionTypes.RECEIVE_PAGE:
 	      pageUrl = getPageUrlFromAction(action);
-	      return _extends({}, pages, (_extends7 = {}, _extends7[meta.name] = _extends({}, pages[meta.name], (_extends6 = {}, _extends6[pageUrl] = {
+	      return _extends({}, pages, (_extends5 = {}, _extends5[pageUrl] = {
 	        ids: payload.items.map(function (i) {
 	          return i[meta.idKey];
 	        }),
 	        fetching: false
-	      }, _extends6)), _extends7));
+	      }, _extends5));
 	    default:
 	      return pages;
 	  }
 	};
 
 	var currentPages = exports.currentPages = function currentPages() {
-	  var _extends8;
+	  var _extends6;
 
 	  var currentPages = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -921,14 +921,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  switch (type) {
 	    case _actionTypes.REQUEST_PAGE:
 	      pageUrl = getPageUrlFromAction(action);
-	      return _extends({}, currentPages, (_extends8 = {}, _extends8[meta.name] = pageUrl, _extends8));
+	      return _extends({}, currentPages, (_extends6 = {}, _extends6[meta.name] = pageUrl, _extends6));
 	    default:
 	      return currentPages;
 	  }
 	};
 
 	var cursor = exports.cursor = function cursor() {
-	  var _extends9;
+	  var _extends7;
 
 	  var cursor = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -937,7 +937,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  switch (type) {
 	    case _actionTypes.RECEIVE_PAGE:
-	      return _extends({}, cursor, (_extends9 = {}, _extends9[meta.name] = meta.cursor, _extends9));
+	      return _extends({}, cursor, (_extends7 = {}, _extends7[meta.name] = meta.cursor, _extends7));
 	    default:
 	      return cursor;
 	  }
