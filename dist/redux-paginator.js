@@ -890,6 +890,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  switch (type) {
 	    case _actionTypes.REQUEST_PAGE:
 	      pageUrl = getPageUrlFromAction(action);
+
+	      if (payload.page === 0) {
+	        pages = {};
+	      }
+
 	      return _extends({}, pages, (_extends4 = {}, _extends4[pageUrl] = {
 	        ids: [],
 	        params: payload.params,
