@@ -31,6 +31,11 @@ export const pages = (pages = {}, action = {}) => {
   switch (type) {
     case REQUEST_PAGE:
       pageUrl = getPageUrlFromAction(action)
+
+      if(payload.page === 0 ){
+        pages = {}
+      }
+
       return {
         ...pages,
         [pageUrl]: {
