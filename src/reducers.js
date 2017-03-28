@@ -1,6 +1,7 @@
 import {
   REQUEST_PAGE,
-  RECEIVE_PAGE
+  RECEIVE_PAGE,
+  RESET_PAGINATION
 } from './actionTypes'
 import { buildSuffix } from './agent'
 
@@ -20,6 +21,8 @@ export const params = (params = {}, action = {}) => {
         ...params,
         [payload.params]: payload.count
       }
+    case RESET:
+      return {}
     default:
       return params
   }
@@ -54,6 +57,8 @@ export const pages = (pages = {}, action = {}) => {
           fetching: false
         }
       }
+    case RESET:
+      return {}
     default:
       return pages
   }
@@ -69,6 +74,11 @@ export const currentPages = (currentPages = {}, action = {}) => {
         ...currentPages,
         [meta.name]: pageUrl
       }
+    case RESET:
+      return {
+        ...currentPages,
+        [meta.name]: ''
+      }
     default:
       return currentPages
   }
@@ -81,6 +91,11 @@ export const cursor = (cursor = {}, action = {}) => {
       return {
         ...cursor,
         [meta.name]: meta.cursor
+      }
+    case RESET:
+      return {
+        ...cursor,
+        [meta.name]: {}
       }
     default:
       return cursor
@@ -105,6 +120,8 @@ export const items = (items = {}, action = {}) => {
         ..._items
       }
     }
+    case RESET:
+      return {}
     default:
       return items
   }

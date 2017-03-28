@@ -97,9 +97,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
-	exports.receivePage = exports.requestPage = undefined;
+	exports.receivePage = exports.requestPage = exports.reset = undefined;
 
 	var _actionTypes = __webpack_require__(1);
+
+	var reset = exports.reset = function reset() {
+	  type: _actionTypes.RESET;
+	};
 
 	var requestPage = exports.requestPage = function requestPage(endpoint, name, initialItem, resultsKey, countKey, pageArgName, idKey, page, params, headers) {
 	  return {
@@ -872,6 +876,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _extends({}, params, (_extends2 = {}, _extends2[payload.params] = undefined, _extends2));
 	    case _actionTypes.RECEIVE_PAGE:
 	      return _extends({}, params, (_extends3 = {}, _extends3[payload.params] = payload.count, _extends3));
+	    case RESET:
+	      return {};
 	    default:
 	      return params;
 	  }
@@ -909,13 +915,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }),
 	        fetching: false
 	      }, _extends5));
+	    case RESET:
+	      return {};
 	    default:
 	      return pages;
 	  }
 	};
 
 	var currentPages = exports.currentPages = function currentPages() {
-	  var _extends6;
+	  var _extends6, _extends7;
 
 	  var currentPages = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -927,13 +935,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    case _actionTypes.REQUEST_PAGE:
 	      pageUrl = getPageUrlFromAction(action);
 	      return _extends({}, currentPages, (_extends6 = {}, _extends6[meta.name] = pageUrl, _extends6));
+	    case RESET:
+	      return _extends({}, currentPages, (_extends7 = {}, _extends7[meta.name] = '', _extends7));
 	    default:
 	      return currentPages;
 	  }
 	};
 
 	var cursor = exports.cursor = function cursor() {
-	  var _extends7;
+	  var _extends8, _extends9;
 
 	  var cursor = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -942,7 +952,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  switch (type) {
 	    case _actionTypes.RECEIVE_PAGE:
-	      return _extends({}, cursor, (_extends7 = {}, _extends7[meta.name] = meta.cursor, _extends7));
+	      return _extends({}, cursor, (_extends8 = {}, _extends8[meta.name] = meta.cursor, _extends8));
+	    case RESET:
+	      return _extends({}, cursor, (_extends9 = {}, _extends9[meta.name] = {}, _extends9));
 	    default:
 	      return cursor;
 	  }
@@ -979,6 +991,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return _extends({}, items, _items);
 	      }
+	    case RESET:
+	      return {};
 	    default:
 	      return items;
 	  }

@@ -1,8 +1,13 @@
 import {
   RECEIVE_PAGE,
-  REQUEST_PAGE
+  REQUEST_PAGE,
+  RESET
 } from './actionTypes'
 
+
+export const reset = () => {
+  type : RESET
+}
 
 export const requestPage = (
   endpoint,
