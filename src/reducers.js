@@ -21,7 +21,7 @@ export const params = (params = {}, action = {}) => {
         ...params,
         [payload.params]: payload.count
       }
-    case RESET:
+    case RESET_PAGINATION:
       return {}
     default:
       return params
@@ -57,7 +57,7 @@ export const pages = (pages = {}, action = {}) => {
           fetching: false
         }
       }
-    case RESET:
+    case RESET_PAGINATION:
       return {}
     default:
       return pages
@@ -74,7 +74,7 @@ export const currentPages = (currentPages = {}, action = {}) => {
         ...currentPages,
         [meta.name]: pageUrl
       }
-    case RESET:
+    case RESET_PAGINATION:
       return {
         ...currentPages,
         [meta.name]: ''
@@ -92,7 +92,7 @@ export const cursor = (cursor = {}, action = {}) => {
         ...cursor,
         [meta.name]: meta.cursor
       }
-    case RESET:
+    case RESET_PAGINATION:
       return {
         ...cursor,
         [meta.name]: {}
@@ -120,7 +120,7 @@ export const items = (items = {}, action = {}) => {
         ..._items
       }
     }
-    case RESET:
+    case RESET_PAGINATION:
       return {}
     default:
       return items

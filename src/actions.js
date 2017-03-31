@@ -1,13 +1,28 @@
 import {
   RECEIVE_PAGE,
   REQUEST_PAGE,
-  RESET
+  RESET_PAGINATION
 } from './actionTypes'
 
 
-export const reset = () => {
-  type : RESET
-}
+export const resetPagination = (
+  endpoint,
+  name,
+  initialItem,
+  resultsKey,
+  countKey,
+  headers
+) => ({
+  type : RESET_PAGINATION,
+  meta : {
+    endpoint,
+    name,
+    initialItem,
+    resultsKey,
+    countKey,
+    headers
+  }
+})
 
 export const requestPage = (
   endpoint,

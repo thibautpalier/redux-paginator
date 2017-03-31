@@ -5,10 +5,9 @@ import {
   pages as pagesReducer,
   cursor as cursorReducer,
   currentPages as currentPagesReducer,
-  items as itemsReducer
+  items as itemsReducer,
 } from './reducers'
-import { requestPage } from './actions'
-
+import { requestPage, resetPagination } from './actions'
 
 export const onlyForEndpoint = (endpoint, reducer) => (state = {}, action = {}) =>
   typeof action.meta == 'undefined' ? state : action.meta.endpoint == endpoint ? reducer(state, action) : state
@@ -34,6 +33,23 @@ export const requestPageActionCreatorForEndpoint = (
     idKey,
     page,
     params,
+    headers
+  )
+
+export const resetPaginationActionCreatorForEndpoint = (
+  endpoint,
+  name,
+  initialItem,
+  resultsKey,
+  countKey,
+  headers
+) =>
+  () => resetPagination(
+    endpoint,
+    name,
+    initialItem,
+    resultsKey,
+    countKey,
     headers
   )
 
@@ -68,17 +84,49 @@ export const getRequestPageActionCreatorsFor = (
   return actions
 }
 
-export const paginator = (itemsReducer, params, pages, currentPages, cursor, requestPageActionCreators) => ({
-  reducers: combineReducers({
-    params,
-    pages,
-    currentPages,
-    cursor
-  }),
-  itemsReducer,
-  ...requestPageActionCreators
-})
+export const getResetPaginationActionCreatorsFor = (
+  endpoint,
+  names,
+  initialItem,
+  resultsKey,
+  countKey,
+  headers
+) => {
+  let actions = {}
+  for (let name of names) {
+    actions = {
+      ...actions,
+      [name]: {
+        resetPagination:resetPaginationActionCreatorForEndpoint(
+          endpoint,
+          name,
+          initialItem,
+          resultsKey,
+          countKey,
+          headers
+        )
+      }
+    }
+  }
+  return actions
+}
 
+export const paginator = (itemsReducer, params, pages, currentPages, cursor, requestPageActionCreators, resetPaginationActionCreator) => {
+
+  let actions = {}
+  for (let name in resetPaginationActionCreator) { //moyen
+    actions[name] = {
+      ...resetPaginationActionCreator[name],
+      ...requestPageActionCreators[name]
+    }
+  }
+
+  return {
+    reducers: combineReducers({params, pages, currentPages, cursor}),
+    itemsReducer,
+    ...actions
+  }
+}
 
 export const createPaginator = (endpoint, names, {
   initialItem,
@@ -108,6 +156,15 @@ export const createPaginator = (endpoint, names, {
     headers
   )
 
-  return paginator(itemsReducer, params, pages, currentPages, cursor, requestPageActionCreators)
+  const resetPaginationActionCreator = getResetPaginationActionCreatorsFor(
+    endpoint,
+    names,
+    initialItem,
+    resultsKey,
+    countKey,
+    headers
+  )
+
+  return paginator(itemsReducer, params, pages, currentPages, cursor, requestPageActionCreators, resetPaginationActionCreator)
 
 }

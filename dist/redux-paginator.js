@@ -89,7 +89,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.__esModule = true;
 	var RECEIVE_PAGE = exports.RECEIVE_PAGE = '@@redux-paginator/RECEIVE_PAGE';
 	var REQUEST_PAGE = exports.REQUEST_PAGE = '@@redux-paginator/REQUEST_PAGE';
-	var RESET = exports.RESET = '@@redux-paginator/RESET';
+	var RESET_PAGINATION = exports.RESET_PAGINATION = '@@redux-paginator/RESET_PAGINATION';
 
 /***/ },
 /* 2 */
@@ -98,12 +98,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
-	exports.receivePage = exports.requestPage = exports.reset = undefined;
+	exports.receivePage = exports.requestPage = exports.resetPagination = undefined;
 
 	var _actionTypes = __webpack_require__(1);
 
-	var reset = exports.reset = function reset() {
-	  type: _actionTypes.RESET;
+	var resetPagination = exports.resetPagination = function resetPagination(endpoint, name, initialItem, resultsKey, countKey, headers) {
+	  return {
+	    type: _actionTypes.RESET_PAGINATION,
+	    meta: {
+	      endpoint: endpoint,
+	      name: name,
+	      initialItem: initialItem,
+	      resultsKey: resultsKey,
+	      countKey: countKey,
+	      headers: headers
+	    }
+	  };
 	};
 
 	var requestPage = exports.requestPage = function requestPage(endpoint, name, initialItem, resultsKey, countKey, pageArgName, idKey, page, params, headers) {
@@ -694,7 +704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
-	exports.createPaginator = exports.paginator = exports.getRequestPageActionCreatorsFor = exports.requestPageActionCreatorForEndpoint = exports.onlyForEndpoint = undefined;
+	exports.createPaginator = exports.paginator = exports.getResetPaginationActionCreatorsFor = exports.getRequestPageActionCreatorsFor = exports.resetPaginationActionCreatorForEndpoint = exports.requestPageActionCreatorForEndpoint = exports.onlyForEndpoint = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -715,6 +725,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	var requestPageActionCreatorForEndpoint = exports.requestPageActionCreatorForEndpoint = function requestPageActionCreatorForEndpoint(endpoint, name, pageArgName, idKey, initialItem, resultsKey, countKey, headers) {
 	  return function (page, params) {
 	    return (0, _actions.requestPage)(endpoint, name, initialItem, resultsKey, countKey, pageArgName, idKey, page, params, headers);
+	  };
+	};
+
+	var resetPaginationActionCreatorForEndpoint = exports.resetPaginationActionCreatorForEndpoint = function resetPaginationActionCreatorForEndpoint(endpoint, name, initialItem, resultsKey, countKey, headers) {
+	  return function () {
+	    return (0, _actions.resetPagination)(endpoint, name, initialItem, resultsKey, countKey, headers);
 	  };
 	};
 
@@ -743,28 +759,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return actions;
 	};
 
-	var paginator = exports.paginator = function paginator(itemsReducer, params, pages, currentPages, cursor, requestPageActionCreators) {
-	  return _extends({
-	    reducers: (0, _redux.combineReducers)({
-	      params: params,
-	      pages: pages,
-	      currentPages: currentPages,
-	      cursor: cursor
-	    }),
-	    itemsReducer: itemsReducer
-	  }, requestPageActionCreators);
+	var getResetPaginationActionCreatorsFor = exports.getResetPaginationActionCreatorsFor = function getResetPaginationActionCreatorsFor(endpoint, names, initialItem, resultsKey, countKey, headers) {
+	  var actions = {};
+	  for (var _iterator2 = names, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+	    var _extends3;
+
+	    var _ref2;
+
+	    if (_isArray2) {
+	      if (_i2 >= _iterator2.length) break;
+	      _ref2 = _iterator2[_i2++];
+	    } else {
+	      _i2 = _iterator2.next();
+	      if (_i2.done) break;
+	      _ref2 = _i2.value;
+	    }
+
+	    var name = _ref2;
+
+	    actions = _extends({}, actions, (_extends3 = {}, _extends3[name] = {
+	      resetPagination: resetPaginationActionCreatorForEndpoint(endpoint, name, initialItem, resultsKey, countKey, headers)
+	    }, _extends3));
+	  }
+	  return actions;
 	};
 
-	var createPaginator = exports.createPaginator = function createPaginator(endpoint, names, _ref2) {
-	  var initialItem = _ref2.initialItem,
-	      resultsKey = _ref2.resultsKey,
-	      countKey = _ref2.countKey,
-	      _ref2$pageArgName = _ref2.pageArgName,
-	      pageArgName = _ref2$pageArgName === undefined ? 'page' : _ref2$pageArgName,
-	      _ref2$idKey = _ref2.idKey,
-	      idKey = _ref2$idKey === undefined ? 'id' : _ref2$idKey,
-	      _ref2$headers = _ref2.headers,
-	      headers = _ref2$headers === undefined ? {} : _ref2$headers;
+	var paginator = exports.paginator = function paginator(itemsReducer, params, pages, currentPages, cursor, requestPageActionCreators, resetPaginationActionCreator) {
+
+	  var actions = {};
+	  for (var name in resetPaginationActionCreator) {
+	    //moyen
+	    actions[name] = _extends({}, resetPaginationActionCreator[name], requestPageActionCreators[name]);
+	  }
+
+	  return _extends({
+	    reducers: (0, _redux.combineReducers)({ params: params, pages: pages, currentPages: currentPages, cursor: cursor }),
+	    itemsReducer: itemsReducer
+	  }, actions);
+	};
+
+	var createPaginator = exports.createPaginator = function createPaginator(endpoint, names, _ref3) {
+	  var initialItem = _ref3.initialItem,
+	      resultsKey = _ref3.resultsKey,
+	      countKey = _ref3.countKey,
+	      _ref3$pageArgName = _ref3.pageArgName,
+	      pageArgName = _ref3$pageArgName === undefined ? 'page' : _ref3$pageArgName,
+	      _ref3$idKey = _ref3.idKey,
+	      idKey = _ref3$idKey === undefined ? 'id' : _ref3$idKey,
+	      _ref3$headers = _ref3.headers,
+	      headers = _ref3$headers === undefined ? {} : _ref3$headers;
 
 
 	  var params = onlyForEndpoint(endpoint, _reducers.params);
@@ -777,7 +820,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  var requestPageActionCreators = getRequestPageActionCreatorsFor(endpoint, names, pageArgName, idKey, initialItem, resultsKey, countKey, headers);
 
-	  return paginator(_reducers.items, params, pages, currentPages, cursor, requestPageActionCreators);
+	  var resetPaginationActionCreator = getResetPaginationActionCreatorsFor(endpoint, names, initialItem, resultsKey, countKey, headers);
+
+	  return paginator(_reducers.items, params, pages, currentPages, cursor, requestPageActionCreators, resetPaginationActionCreator);
 	};
 
 /***/ },
@@ -877,7 +922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _extends({}, params, (_extends2 = {}, _extends2[payload.params] = undefined, _extends2));
 	    case _actionTypes.RECEIVE_PAGE:
 	      return _extends({}, params, (_extends3 = {}, _extends3[payload.params] = payload.count, _extends3));
-	    case RESET:
+	    case _actionTypes.RESET_PAGINATION:
 	      return {};
 	    default:
 	      return params;
@@ -916,7 +961,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }),
 	        fetching: false
 	      }, _extends5));
-	    case RESET:
+	    case _actionTypes.RESET_PAGINATION:
 	      return {};
 	    default:
 	      return pages;
@@ -936,7 +981,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    case _actionTypes.REQUEST_PAGE:
 	      pageUrl = getPageUrlFromAction(action);
 	      return _extends({}, currentPages, (_extends6 = {}, _extends6[meta.name] = pageUrl, _extends6));
-	    case RESET:
+	    case _actionTypes.RESET_PAGINATION:
 	      return _extends({}, currentPages, (_extends7 = {}, _extends7[meta.name] = '', _extends7));
 	    default:
 	      return currentPages;
@@ -954,7 +999,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  switch (type) {
 	    case _actionTypes.RECEIVE_PAGE:
 	      return _extends({}, cursor, (_extends8 = {}, _extends8[meta.name] = meta.cursor, _extends8));
-	    case RESET:
+	    case _actionTypes.RESET_PAGINATION:
 	      return _extends({}, cursor, (_extends9 = {}, _extends9[meta.name] = {}, _extends9));
 	    default:
 	      return cursor;
@@ -992,7 +1037,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return _extends({}, items, _items);
 	      }
-	    case RESET:
+	    case _actionTypes.RESET_PAGINATION:
 	      return {};
 	    default:
 	      return items;
